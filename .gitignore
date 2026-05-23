@@ -1,0 +1,6 @@
+.vscode/
+*.o
+*.elf
+*.iso
+iso_root/
+limine/limine
