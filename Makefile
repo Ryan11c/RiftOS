@@ -21,7 +21,7 @@ $(KERNEL): $(OBJ)
 limine/limine:
 	$(MAKE) -C limine
 
-$(ISO): $(KERNEL) limine/limine
+$(ISO): $(KERNEL) limine/limine limine.conf
 	rm -rf iso_root
 	mkdir -p iso_root/boot/limine
 	cp $(KERNEL) iso_root/boot/kernel.elf
