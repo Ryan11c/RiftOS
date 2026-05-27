@@ -4,6 +4,7 @@
 
 #include "framebuffer.h"
 #include "panic.h"
+#include "serial.h"
 
 //limine finds boot requests by scanning these special sections in the kernel
 //image. keeping the start marker first makes the layout easier to eyeball and
@@ -37,16 +38,23 @@ static void draw_boot_screen(struct limine_framebuffer *framebuffer) {
 
 //kernel entry point. limine jumps here after loading the elf
 void kernel_main(void) {
+    serial_init();
+    serial_write_string("RiftOS booting\n");
+
     if (!LIMINE_BASE_REVISION_SUPPORTED) {
         panic("Limine base revision is unsupported");
     }
+    serial_write_string("Limine base revision supported\n");
 
     if (framebuffer_request.response == 0 || framebuffer_request.response->framebuffer_count < 1) {
         panic("No framebuffer was provided by Limine");
     }
 
     struct limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
+    serial_write_string("Framebuffer initialized\n");
+
     draw_boot_screen(framebuffer);
+    serial_write_string("Boot screen drawn\n");
 
     //nothing else exists yet, so park the cpu instead of returning into nowhere
     for (;;) {
