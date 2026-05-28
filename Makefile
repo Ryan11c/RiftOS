@@ -40,9 +40,12 @@ $(ISO): $(KERNEL) limine/limine limine.conf
 	./limine/limine bios-install $(ISO)
 
 run: $(ISO)
-	qemu-system-x86_64 -cdrom $(ISO)
+	qemu-system-x86_64 -cdrom $(ISO) -serial stdio
+
+run-serial: $(ISO)
+	qemu-system-x86_64 -cdrom $(ISO) -serial stdio -display none
 
 clean:
 	rm -rf $(OBJ) *.o *.elf *.iso iso_root
 
-.PHONY: all run clean
+.PHONY: all run run-serial clean
